@@ -9,12 +9,3 @@ please notice that the development phase of this project was handled in [Quera-f
 my friend Ali Hajeb fixed some bugs in original QTwiiter's backend and I used it as my backend in this project.
 for more instructions on how to set up the server, visit the [backend repository](https://github.com/ali-hajeb/rest-twitter-nodejs).
 
-## Set up
-
-To run this client,
-1. you need to clone and run the [backend server](https://github.com/ali-hajeb/rest-twitter-nodejs).
-2. create a `.env` file in the root directory of `./qtwitter-reactjs` (client) containing backend server URL (i.e. http://localhost:4000) with the `REACT_APP_API_URL` key.
-
-`~/.env`:
-```shell
-REACT_APP_API_URL = 'http://localhost:4000'
