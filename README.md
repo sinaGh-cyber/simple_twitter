@@ -1,6 +1,7 @@
 #simple-twitter
 
 This project is a simple and minimal clone of Twitter created using React.js. It was done as a challenge from [@QueraTeam](https://github.com/QueraTeam) React Bootcamp.
+please notice that the development phase of this project was handled in [Quera-front-end_Bootcamp](https://github.com/sinaGh-cyber/Quera-front-end_Bootcamp) repository and this repository is just to represent my project to recruiters, so I used only one git commit.
 
 ## Backend
 
