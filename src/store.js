@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import {
   authSlice,
   fetchAth,
@@ -12,8 +12,31 @@ import {
   deleteTweet,
   fetchThread,
 } from './features/feed/feedSlice';
-import { profileSlice, fetchProfile, followNewUser } from './features/Profile/profileSlice';
+import {
+  profileSlice,
+  fetchProfile,
+  followNewUser,
+} from './features/Profile/profileSlice';
 import { tweetSlice, postTweet } from './features/Tweet/TweetSlice';
+import { toast } from 'react-toastify';
+
+const listenerMiddleware = createListenerMiddleware();
+
+listenerMiddleware.startListening({
+  actionCreator: fetchAth.fulfilled,
+  effect: (_, { dispatch, getState }) => {
+    dispatch(fetchCurrentUser(getState().auth.username));
+  },
+});
+listenerMiddleware.startListening({
+  predicate: (action, currState, prevState) =>
+    action?.error?.message === 'Request failed with status code 403',
+  effect: (_, { dispatch }) => {
+    toast.dismiss();
+    dispatch(authSlice.actions.logout());
+    toast.error('لطفا دوباره وارد شدوید.');
+  },
+});
 
 const localStorageMiddleware = ({ getState }) => {
   return (next) => (action) => {
@@ -53,7 +76,9 @@ export const store = configureStore({
   preloadedState: reHydrateStore(),
 
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(localStorageMiddleware),
+    getDefaultMiddleware()
+      .concat(localStorageMiddleware)
+      .concat(listenerMiddleware.middleware),
 });
 
 export const authActions = {
@@ -78,5 +103,5 @@ export const feedActions = {
 export const profileActions = {
   ...profileSlice.actions,
   fetchProfile,
-  followNewUser
+  followNewUser,
 };

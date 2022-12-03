@@ -1,4 +1,3 @@
-import LoadingAnimation from '../loadingAnimation/loadingAnimation';
 import UserItem from './userItem';
 
 const UserList = ({ userSArray, title }) => {
