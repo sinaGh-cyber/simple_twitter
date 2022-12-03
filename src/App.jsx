@@ -1,5 +1,4 @@
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -8,18 +7,20 @@ import {
 import { ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
-import Home from './Pages/Home/home';
-import Login from './Pages/Login/login';
-import NotFound from './Pages/NotFound/NotFound';
-import Profile from './Pages/Profile/profile';
-import SignUp from './Pages/Signup/signup';
-import Thread from './Pages/Thread/thread';
-import Search from './Pages/Search/search';
-import TweetModal from './modules/tweetModal/tweetModal';
-import { httpRequest } from './services/httpRequest';
-import Followings from './Pages/Profile/Followings/followings';
-import Followers from './Pages/Profile/Followers/followers';
-import TweetList from './modules/tweetList/tweetList';
+import { lazy, Suspense } from 'react';
+import LoadingAnimation from './components/loadingAnimation/loadingAnimation';
+import TweetModal from './model/tweetModal/tweetModal';
+
+const Home = lazy(() => import('./Pages/Home/home'));
+const Login = lazy(() => import('./Pages/Login/login'));
+const NotFound = lazy(() => import('./Pages/NotFound/NotFound'));
+const Profile = lazy(() => import('./Pages/Profile/profile'));
+const SignUp = lazy(() => import('./Pages/Signup/signup'));
+const Thread = lazy(() => import('./Pages/Thread/thread'));
+const Search = lazy(() => import('./Pages/Search/search'));
+const Followings = lazy(() => import('./Pages/Profile/Followings/followings'));
+const Followers = lazy(() => import('./Pages/Profile/Followers/followers'));
+const TweetList = lazy(() => import('./model/tweetList/tweetList'));
 
 function App() {
   const isTweetModalActive = useSelector(
@@ -27,7 +28,7 @@ function App() {
   );
 
   return (
-    <div className="flex relative flex-col w-screen min-h-screen bg-gray-ExtraExtraLight">
+    <div className="flex relative flex-col justify-center items-center w-screen min-h-screen bg-gray-ExtraExtraLight">
       {isTweetModalActive && <TweetModal />}
       <ToastContainer
         position="top-right"
@@ -41,51 +42,55 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <Routes>
-        <Route
-          path={'/home'}
-          element={
-            <Protected path="/home">
-              <Home />
-            </Protected>
-          }
-          key="0"
-        />
-        <Route
-          path={'/thread/:tweetId'}
-          element={
-            <Protected path="/thread/:tweetId">
-              <Thread />
-            </Protected>
-          }
-          key="1"
-        />
-        <Route
-          path={'/user/:username'}
-          element={
-            <Protected path="/user/:username">
-              <Profile />
-            </Protected>
-          }
-          key="2"
-        >
-          <Route path={'followings'} element={<Followings />} key="21" />
-          <Route path={'followers'} element={<Followers />} key="22" />
-          <Route path={'tweets'} element={<TweetList />} key="23" />
-        </Route>
-        <Route path={'/login'} element={<Login />} key="3" />
-        <Route path={'/sign-up'} element={<SignUp />} key="4" />
-        <Route path={'*'} element={<NotFound />} key="5" />{' '}
-        <Route
-          path={'/search'}
-          element={
-            <Protected path="/search">
-              <Search />
-            </Protected>
-          }
-          key="6"
-        />
-      </Routes>
+      <Suspense fallback={<LoadingAnimation />}>
+        <Routes>
+          <Route
+            path={'/home'}
+            element={
+              <Protected path="/home">
+                <Home />
+              </Protected>
+            }
+            key="0"
+          />
+          
+          <Route
+            path={'/thread/:tweetId'}
+            element={
+              <Protected path="/thread/:tweetId">
+                <Thread />
+              </Protected>
+            }
+            key="1"
+          />
+          <Route
+            path={'/user/:username'}
+            element={
+              <Protected path="/user/:username">
+                <Profile />
+              </Protected>
+            }
+            key="2"
+          >
+            <Route path={'followings'} element={<Followings />} key="21" />
+            <Route path={'followers'} element={<Followers />} key="22" />
+            <Route path={'tweets'} element={<TweetList />} key="23" />
+          </Route>
+          <Route path={'/login'} element={<Login />} key="3" />
+          <Route index element={<Login />} key="4" />
+          <Route path={'/sign-up'} element={<SignUp />} key="5" />
+          <Route path={'*'} element={<NotFound />} key="6" />{' '}
+          <Route
+            path={'/search'}
+            element={
+              <Protected path="/search">
+                <Search />
+              </Protected>
+            }
+            key="7"
+          />
+        </Routes>{' '}
+      </Suspense>
     </div>
   );
 }
