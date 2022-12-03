@@ -1,24 +1,24 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import TweetList from '../../modules/tweetList/tweetList';
+import TweetList from '../../model/tweetList/tweetList';
 import Default from '../../Layout/Default';
 import { feedActions } from '../../store';
 
 const Thread = () => {
   const { tweetId } = useParams();
   const dispatch = useDispatch();
-  useEffect(() => {
+
+  const refresher = () => {
     dispatch(feedActions.fetchThread(tweetId));
+  };
+
+  useEffect(() => {
+    refresher();
   }, [tweetId]);
 
   return (
-    <Default
-      refreshHandler={() => {
-        dispatch(feedActions.fetchThread(tweetId));
-      }}
-      pageName={'رشته توییت'}
-    >
+    <Default refreshHandler={refresher} pageName={'رشته توییت'}>
       <TweetList />
     </Default>
   );
