@@ -1,13 +1,9 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import LoadingAnimation from '../../components/loadingAnimation/loadingAnimation';
+import { useEffect, useState } from 'react';
+
 import UserList from '../../components/userList/userList';
 import Default from '../../Layout/Default';
 import { httpRequest } from '../../services/httpRequest';
-import { profileActions } from '../../store';
+
 
 const initialSearchResult = {
   isLoading: false,
