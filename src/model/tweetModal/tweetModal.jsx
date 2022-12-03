@@ -45,7 +45,6 @@ const TweetModal = () => {
   const onSubmit = (data) => {
     const { body } = data;
     // api doesn't work properly when include tags key in request body
-    console.log(replyId);
     dispatch(
       tweetActions.postTweet(replyId ? { body, reply: replyId } : { body })
     );
