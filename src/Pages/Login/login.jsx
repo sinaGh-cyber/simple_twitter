@@ -1,17 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  Navigate,
-  NavLink,
   useNavigate,
-  useNavigation,
   useSearchParams,
 } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import UserForm from '../../components/userForm/userForm';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { authActions } from '../../store';
 
 const initFormState = {
@@ -35,14 +31,14 @@ const formSchema = yup.object().shape({
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authData = useSelector((state) => state.auth);
+  const state = useSelector((state) => state);
   useEffect(() => {
-    if (authData.token && authData.userId) {
+    if (state.auth.token && state.loggedInUserProfile.id) {
       navigate(
         searchParams.has('redirect') ? searchParams.get('redirect') : '/home'
       );
     }
-  }, [authData]);
+  }, [state.auth, state.loggedInUserProfile]);
 
   const [searchParams] = useSearchParams();
   const useFormInput = useForm({
@@ -53,7 +49,6 @@ const Login = () => {
 
   const onSubmit = (data) => {
     dispatch(authActions.login(data));
-    dispatch(authActions.getCurrentUserId(data.username))
   };
 
   const inputsArray = [
