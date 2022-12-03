@@ -4,11 +4,25 @@ import { FaUser, FaSearch } from 'react-icons/fa';
 import { IoLogOut } from 'react-icons/io5';
 import { BiMessageRoundedAdd } from 'react-icons/bi';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { authActions, tweetActions } from '../../store';
+import MainNavBarLink from './mainNavBarLink';
+
+const navBtnTextStyle = 'hidden lg:inline md:w-4/6 text-left';
+const navBtnIconStyle = 'text-4xl lg:w-2/6';
+const navBtnInnerDiv =
+  'flex justify-around px-6 py-2 text-2xl hover:text-black hover:bg-gray-ExtraLight rounded-md';
 
 const NavBar = () => {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.auth.username);
+
+  const onLogoutBtnHandler = () => {
+    dispatch(authActions.logout());
+  };
+  const tweetModalToggleBtnHandler = () => {
+    dispatch(tweetActions.ToggleModal());
+  };
 
   return (
     <nav className="w-full  md:h-screen p-1 flex flex-row-reverse md:flex-col justify-between items-center overflow-x-hidden">
@@ -19,84 +33,32 @@ const NavBar = () => {
           </h1>
         </NavLink>
 
-        <NavLink
-          className={(navData) =>
-            navData.isActive
-              ? 'md:mb-4  bg-gray-light rounded-md text-gray-ExtraExtraLight '
-              : 'md:mb-4 text-black '
-          }
-          to="/home"
-        >
-          <div className="flex justify-around items-center gap-4 px-6 py-2 text-2xl hover:text-black hover:bg-gray-ExtraLight rounded-md ">
-            {' '}
-            <span className="text-4xl lg:w-2/6">
-              <AiFillHome />
-            </span>{' '}
-            <span className="hidden lg:inline md:w-4/6 text-left">خانه</span>
-          </div>
-        </NavLink>
+        <MainNavBarLink to="/home" showText={'خانه'} Icon={AiFillHome} />
 
-        <NavLink
-          className={(navData) =>
-            navData.isActive
-              ? 'md:mb-4 bg-gray-light rounded-md text-gray-ExtraExtraLight '
-              : 'md:mb-4 text-black '
-          }
+        <MainNavBarLink
           to={`/user/${username}/tweets`}
-        >
-          <div className="flex justify-around items-center gap-4 px-6 py-2 text-2xl hover:text-black hover:bg-gray-ExtraLight rounded-md ">
-            {' '}
-            <span className="text-4xl lg:w-2/6">
-              <FaUser />
-            </span>{' '}
-            <span className="hidden lg:inline md:w-4/6 text-left">پروفایل</span>
-          </div>
-        </NavLink>
+          showText={'پروفایل'}
+          Icon={FaUser }
+        />
 
-        <NavLink
-          className={(navData) =>
-            navData.isActive
-              ? 'md:mb-4 bg-gray-light rounded-md text-gray-ExtraExtraLight '
-              : 'md:mb-4 text-black '
-          }
-          to={`/search`}
-        >
-          <div className="flex justify-around items-center gap-4 px-6 py-2 text-2xl hover:text-black hover:bg-gray-ExtraLight rounded-md ">
-            {' '}
-            <span className="text-4xl lg:w-2/6">
-              <FaSearch />
-            </span>{' '}
-            <span className="hidden lg:inline md:w-4/6 text-left">جستجو</span>
-          </div>
-        </NavLink>
+        <MainNavBarLink to={`/search`} showText={'جستجو'} Icon={FaSearch} />
 
-        <button
-          onClick={() => {
-            dispatch(tweetActions.ToggleModal());
-          }}
-        >
-          <div className="flex justify-around items-center gap-4 px-6 py-2 text-2xl hover:text-black hover:bg-gray-ExtraLight rounded-md ">
+        <button onClick={tweetModalToggleBtnHandler}>
+          <div className={`${navBtnInnerDiv} items-center gap-4`}>
             {' '}
-            <span className="text-4xl lg:w-2/6">
+            <span className={navBtnIconStyle}>
               <BiMessageRoundedAdd />
             </span>{' '}
-            <span className="hidden lg:inline md:w-4/6 text-left">توییت</span>
+            <span className={navBtnTextStyle}>توییت</span>
           </div>
         </button>
       </ul>
       <ul className="md:w-full w-5/12 flex  justify-start">
-        <button
-          onClick={() => {
-            dispatch(authActions.logout());
-          }}
-          className="md:w-full md:mb-5 "
-        >
-          <div className="flex justify-around px-6 py-2 text-2xl hover:text-black hover:bg-gray-ExtraLight rounded-md ">
+        <button onClick={onLogoutBtnHandler} className="md:w-full md:mb-5 ">
+          <div className={navBtnInnerDiv}>
             {' '}
-            <span className="text-4xl lg:w-2/6">{<IoLogOut />}</span>{' '}
-            <span className="hidden lg:inline md:w-4/6 text-left">
-              {username}
-            </span>
+            <span className={navBtnIconStyle}>{<IoLogOut />}</span>{' '}
+            <span className={navBtnTextStyle}>{username}</span>
           </div>
         </button>
       </ul>
