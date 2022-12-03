@@ -25,9 +25,9 @@ const UserItem = ({ username, followersCount }) => {
   return (
     <li className="bg-gray-ExtraLight flex justify-between w-11/12 md:w-9/12 p-4 rounded">
       <section className="flex gap-3 items-center x">
-        <span className="hidden md:inline p-2 bg-blue text-white font-medium rounded-xl">
+        { followersCount && <span className="hidden md:inline p-2 bg-blue text-white font-medium rounded-xl">
           {`followers: ${followersCount}`}
-        </span>
+        </span>}
         {isCurrentUserFollowingLoggedInUser && (
           <span className="p-2 bg-gray-light text-white  rounded-xl">
             شما را دنبال می کند
